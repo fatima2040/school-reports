@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>نظام التقارير المدرسية</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body{font-family:'Cairo',sans-serif}
+    /* أزرار تبويب نشطة */
+    .tab-active{border-bottom-width:3px}
+    /* تنسيقات الطباعة */
+    @media print{
+      #topbar,#tabs,#actions,.hide-print{display:none!important}
+      .card{box-shadow:none;border:0;padding:0}
+      body{background:#fff}
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- شريط علوي -->
+  <header id="topbar" class="bg-gradient-to-l from-purple-600 to-teal-500 text-white">
+    <div class="max-w-6xl mx-auto p-4 flex items-center gap-3">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Emblem_of_Saudi_Ministry_of_Education.svg/120px-Emblem_of_Saudi_Ministry_of_Education.svg.png"
+           alt="شعار" class="w-10 h-10 object-contain">
+      <div>
+        <h1 class="text-xl font-bold">نظام التقارير المدرسية</h1>
+        <p class="text-sm opacity-90">إدارة يومية • أسبوعية • شهرية • نشاط • تواصل مع ولي الأمر</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- تبويبات -->
+  <nav id="tabs" class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-4">
+      <ul class="flex flex-wrap gap-2 sm:gap-4 py-3 text-sm">
+        <li><button data-tab="daily"   class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">اليومي</button></li>
+        <li><button data-tab="weekly"  class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">الأسبوعي</button></li>
+        <li><button data-tab="monthly" class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">الشهري</button></li>
+        <li><button data-tab="activity" class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">برامج النشاط الطلابي</button></li>
+        <li><button data-tab="nonclass" class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">الأنشطة اللاصفّية</button></li>
+        <li><button data-tab="parent"   class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">تواصل وليّ الأمر</button></li>
+        <li><button data-tab="waiting"  class="tab px-3 py-2 rounded-md hover:bg-gray-100 border-b-2 border-transparent">تقرير حصة الانتظار</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- محتوى -->
+  <main class="max-w-6xl mx-auto p-4 sm:p-6">
+    <!-- أزرار عامة -->
+    <div id="actions" class="flex flex-wrap gap-2 mb-4">
+      <button id="btnSave" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">حفظ في المتصفح</button>
+      <button id="btnExport" class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700">طباعة / حفظ PDF</button>
+      <button id="btnClear" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">مسح المدخلات</button>
+    </div>
+
+    <!-- بطاقة نموذج قابلة لإعادة الاستخدام -->
+    <section id="panel" class="card bg-white rounded-xl shadow p-4 sm:p-6">
+      <!-- العنوان الديناميكي -->
+      <h2 id="formTitle" class="text-lg sm:text-xl font-bold mb-4">نموذج التقرير اليومي</h2>
+
+      <!-- نموذج عام: نفس الحقول الأساسية + حقول خاصة لكل تبويب -->
+      <form id="reportForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- حقول أساسية مشتركة -->
+        <div>
+          <label class="block text-sm mb-1">التاريخ</label>
+          <input type="date" name="date" class="w-full border rounded-md p-2" required>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">اسم المعلمة</label>
+          <input type="text" name="teacher" class="w-full border rounded-md p-2" placeholder="اكتبي اسم المعلمة" required>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">المادة / البرنامج</label>
+          <input type="text" name="subject" class="w-full border rounded-md p-2" placeholder="مثال: رياضيات / نادي STEM">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">الصف / القسم</label>
+          <input type="text" name="grade" class="w-full border rounded-md p-2" placeholder="2 ث/أ">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">عدد الطالبات الحاضرات</label>
+          <input type="number" min="0" name="presentCount" class="w-full border rounded-md p-2" placeholder="مثال: 28">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">رابط صور / مرفقات (اختياري)</label>
+          <input type="url" name="attachments" class="w-full border rounded-md p-2" placeholder="رابط Google Drive / صور">
+        </div>
+
+        <!-- حقول نصية موسعة -->
+        <div class="sm:col-span-2">
+          <label class="block text-sm mb-1">وصف موجز</label>
+          <textarea name="summary" rows="3" class="w-full border rounded-md p-2" placeholder="ملخص التنفيذ والفعاليات والمهام…"></textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-sm mb-1">نواتج التعلم / الأثر</label>
+          <textarea name="outcomes" rows="3" class="w-full border rounded-md p-2" placeholder="ما الذي تحقق؟ مؤشرات، شواهد…"></textarea>
+        </div>
+
+        <!-- منطقة حقول خاصة بكل تبويب: تُحقن برمجياً -->
+        <div id="tabSpecific" class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+      </form>
+
+      <!-- قائمة مدخلات محفوظة -->
+      <div class="mt-6">
+        <h3 class="font-semibold mb-2">السجلات المحفوظة (محليًا)</h3>
+        <div id="savedList" class="space-y-2"></div>
+      </div>
+
+      <!-- تذييل -->
+      <footer class="mt-8 text-sm text-gray-500">
+        حقوق النسخ محفوظة ©
+        <span id="year"></span> — تصميم: <span class="font-semibold">فاطمة سعد العمري</span> (نموذج)
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // الحالة العامة
+    const $ = s => document.querySelector(s);
+    const tabs = document.querySelectorAll('.tab');
+    const form = $('#reportForm');
+    const tabSpecific = $('#tabSpecific');
+    const savedList = $('#savedList');
+    const formTitle = $('#formTitle');
+    const storageKey = 'school-reports-v1';
+    let activeTab = 'daily';
+
+    // تعريف الحقول الخاصة لكل تبويب
+    const tabFields = {
+      daily: [
+        {name:'lesson', label:'موضوع الدرس', type:'text', placeholder:'مثال: خصائص الأعداد الحقيقية'},
+        {name:'homework', label:'الواجب / المتابعة', type:'text', placeholder:'تم تسليم/متابعة الواجب…'}
+      ],
+      weekly: [
+        {name:'weekNo', label:'أسبوع رقم', type:'number', placeholder:'مثال: 2'},
+        {name:'goals', label:'أبرز أهداف الأسبوع', type:'textarea', placeholder:'الأهداف التنفيذية للأسبوع…'}
+      ],
+      monthly: [
+        {name:'month', label:'الشهر', type:'text', placeholder:'مثال: محرم 1447 / سبتمبر'},
+        {name:'kpis', label:'مؤشرات الأداء (KPIs)', type:'textarea', placeholder:'نسبة إنجاز، حضور، متوسط درجات…'}
+      ],
+      activity: [
+        {name:'programName', label:'اسم البرنامج', type:'text', placeholder:'مثال: مسابقة موهبة'},
+        {name:'partners', label:'شركاء / منظمات مشاركة', type:'text', placeholder:'مثال: نادي الموهوبات'}
+      ],
+      nonclass: [
+        {name:'activityType', label:'نوع النشاط اللاصفي', type:'text', placeholder:'مثال: نادي القراءة'},
+        {name:'duration', label:'المدة', type:'text', placeholder:'مثال: 45 دقيقة'}
+      ],
+      parent: [
+        {name:'guardian', label:'اسم وليّ الأمر', type:'text', placeholder:'اسم ولي الأمر'},
+        {name:'message', label:'ملخص التواصل', type:'textarea', placeholder:'نص الاتصال / الرسالة / الملاحظة'}
+      ],
+      waiting: [
+        {name:'period', label:'الحصة', type:'text', placeholder:'مثال: الحصة الرابعة'},
+        {name:'reason', label:'السبب', type:'textarea', placeholder:'سبب الانتظار / خطة الاستفادة من الوقت'}
+      ]
+    };
+
+    function setYear(){ $('#year').textContent = new Date().getFullYear(); }
+    setYear();
+
+    // إنشاء الحقول الخاصة حسب التبويب
+    function renderTabSpecific(tab){
+      tabSpecific.innerHTML = '';
+      (tabFields[tab] || []).forEach(f=>{
+        const wrap = document.createElement('div');
+        const lbl = document.createElement('label');
+        lbl.className = 'block text-sm mb-1';
+        lbl.textContent = f.label;
+        let input;
+        if(f.type==='textarea'){
+          input = document.createElement('textarea');
+          input.rows = 3;
+        } else {
+          input = document.createElement('input');
+          input.type = f.type || 'text';
+        }
+        input.name = f.name;
+        input.placeholder = f.placeholder || '';
+        input.className = 'w-full border rounded-md p-2';
+        wrap.appendChild(lbl); wrap.appendChild(input);
+        tabSpecific.appendChild(wrap);
+      });
+    }
+
+    // تبديل التبويبات
+    function activateTab(tab){
+      activeTab = tab;
+      tabs.forEach(b=>{
+        b.classList.toggle('tab-active', b.dataset.tab===tab);
+        b.classList.toggle('border-purple-600', b.dataset.tab===tab);
+      });
+      const titles = {
+        daily:'نموذج التقرير اليومي',
+        weekly:'نموذج التقرير الأسبوعي',
+        monthly:'نموذج التقرير الشهري',
+        activity:'نموذج برامج النشاط الطلابي',
+        nonclass:'نموذج الأنشطة اللاصفّية',
+        parent:'نموذج تواصل وليّ الأمر',
+        waiting:'نموذج تقرير حصة الانتظار'
+      };
+      formTitle.textContent = titles[tab] || 'نموذج التقرير';
+      renderTabSpecific(tab);
+      loadDraft(); // تحميل مسودة لكل تبويب
+      renderSaved();
+    }
+
+    tabs.forEach(b=>b.addEventListener('click', ()=>activateTab(b.dataset.tab)));
+    activateTab('daily'); // الافتراضي
+
+    // حفظ محلي (localStorage)
+    function loadAll(){
+      try { return JSON.parse(localStorage.getItem(storageKey)) || {}; }
+      catch{ return {}; }
+    }
+    function saveAll(data){ localStorage.setItem(storageKey, JSON.stringify(data)); }
+
+    function getFormData(){
+      const data = { _tab: activeTab };
+      new FormData(form).forEach((v,k)=> data[k]=v);
+      return data;
+    }
+
+    function setFormData(obj={}){
+      [...form.elements].forEach(el=>{
+        if(el.name && obj.hasOwnProperty(el.name)) el.value = obj[el.name];
+        else if(el.name && !obj.hasOwnProperty(el.name)) el.value = '';
+      });
+    }
+
+    // مسودات منفصلة لكل تبويب
+    function saveDraft(){
+      const all = loadAll();
+      all[`draft_${activeTab}`] = getFormData();
+      saveAll(all);
+    }
+    function loadDraft(){
+      const all = loadAll();
+      const d = all[`draft_${activeTab}`] || {};
+      setFormData(d);
+    }
+
+    // حفظ سجل كامل
+    function saveRecord(){
+      const all = loadAll();
+      const key = `records_${activeTab}`;
+      all[key] = all[key] || [];
+      const record = getFormData();
+      record._id = Date.now();
+      all[key].unshift(record);
+      // مسح المسودة بعد حفظ نهائي
+      all[`draft_${activeTab}`] = {};
+      saveAll(all);
+      setFormData({});
+      renderSaved();
+      alert('تم الحفظ محليًا ✅');
+    }
+
+    // عرض السجلات المحفوظة
+    function renderSaved(){
+      const all = loadAll();
+      const key = `records_${activeTab}`;
+      const items = all[key] || [];
+      savedList.innerHTML = '';
+      if(!items.length){
+        savedList.innerHTML = '<div class="text-gray-500 text-sm">لا توجد سجلات محفوظة لهذا التبويب.</div>';
+        return;
+      }
+      items.forEach(r=>{
+        const div = document.createElement('div');
+        div.className = 'border rounded-md p-3 flex flex-col gap-1';
+        const head = `${r.date || '—'} • ${r.teacher || '—'} • ${r.subject || '—'}`;
+        div.innerHTML = `
+          <div class="text-sm font-semibold">${head}</div>
+          <div class="text-xs text-gray-600">الصف: ${r.grade || '—'} | الحضور: ${r.presentCount || '—'}</div>
+          <div class="text-sm">${(r.summary||'').slice(0,160)}${(r.summary||'').length>160?'…':''}</div>
+          <div class="flex gap-2 pt-2">
+            <button class="text-teal-700 text-sm underline" data-action="fill">فتح</button>
+            <button class="text-red-700 text-sm underline" data-action="del">حذف</button>
+          </div>
+        `;
+        // أحداث الأزرار
+        div.querySelector('[data-action="fill"]').onclick = ()=>{
+          setFormData(r); // فتح في النموذج
+          // حفظ كمسودة حتى لا نفقده بالطباعة
+          saveDraft();
+          window.scrollTo({top:0,behavior:'smooth'});
+        };
+        div.querySelector('[data-action="del"]').onclick = ()=>{
+          const all2 = loadAll();
+          all2[key] = (all2[key]||[]).filter(x=>x._id!==r._id);
+          saveAll(all2);
+          renderSaved();
+        };
+        savedList.appendChild(div);
+      });
+    }
+
+    // أزرار أعلى الصفحة
+    $('#btnSave').addEventListener('click', ()=> saveRecord());
+    $('#btnExport').addEventListener('click', ()=>{
+      saveDraft();
+      window.print(); // اطباعة / حفظ PDF
+    });
+    $('#btnClear').addEventListener('click', ()=>{
+      setFormData({});
+      saveDraft();
+    });
+
+    // حفظ تلقائي للمسودة أثناء الكتابة
+    form.addEventListener('input', ()=> saveDraft());
+
+    // --- تكامل اختياري مع Google Sheets (متقدم) ---
+    // 1) أنشئي Google Apps Script يكتب للشيـت ويعيد {status:"ok"}.
+    // 2) نشّريه كـ Web App (Anyone with the link).
+    // 3) ضعي الرابط في المتغير أدناه وشغّلي sendToSheet(record).
+    const APPS_SCRIPT_URL = ""; // مثال: https://script.google.com/macros/s/xxx/exec
+    async function sendToSheet(record){
+      if(!APPS_SCRIPT_URL){ alert('أضيفي رابط Web App في APPS_SCRIPT_URL'); return; }
+      try{
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(record)
+        });
+        const data = await res.json();
+        if(data.status==='ok'){ alert('تم الإرسال إلى Google Sheets ✅'); }
+        else{ alert('حدثت مشكلة أثناء الإرسال'); }
+      }catch(e){ alert('فشل الاتصال: '+e.message); }
+    }
+    // يمكنكِ إضافة زر للإرسال للشيت هكذا (اختياري):
+    // const sendBtn = document.createElement('button');
+    // sendBtn.textContent = 'إرسال إلى Google Sheets';
+    // sendBtn.className = 'mt-3 bg-blue-600 text-white px-4 py-2 rounded-md';
+    // sendBtn.onclick = ()=> sendToSheet(getFormData());
+    // document.querySelector('#actions').appendChild(sendBtn);
+  </script>
+</body>
+</html>
