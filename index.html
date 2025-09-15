@@ -1,147 +1,101 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>نظام الأسئلة التفاعلي - أنماط التعلم</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
     body { font-family: 'Tajawal', sans-serif; }
+    .pattern-card {
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .pattern-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .visual-pattern { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .analytical-pattern { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .interactive-pattern { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .comprehensive-pattern { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+
     .question-card {
-      background: white;
-      border-radius: 15px;
+      background: white; border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
-      margin-bottom: 2rem;
-      padding: 1.5rem;
     }
-    .question-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
+    .question-card:hover { transform: translateY(-2px); box-shadow:0 15px 40px rgba(0,0,0,0.15); }
+
+    .geogebra-container { border: 3px solid #4facfe; border-radius: 10px; background: #f8faff; }
+
+    /* إطار المستطيل العام للصور */
+    .img-frame { background:#fff; border:2px solid #93c5fd; border-radius: 12px; padding:16px; box-shadow: 0 10px 20px rgba(0,0,0,.08); }
   </style>
 </head>
-<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen p-6">
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">🎯 نظام الأسئلة التفاعلي</h1>
+      <p class="text-lg text-gray-600">اختاري نمط التعلم المناسب لكِ واستمتعي بحل الأسئلة</p>
+    </div>
 
-  <!-- السؤال الأول -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الأول: رسم الدالة</h3>
-    <p class="mb-2">ارسمي الدالة f(x) = |x| - 2 باستخدام جيوجبرا، ما هو شكل الرسم البياني؟</p>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg text-center">
-      <a href="https://www.geogebra.org/classic?lang=ar" target="_blank"
-         class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold">
-        🚀 افتحي جيوجبرا كلاسيك
-      </a>
+    <!-- Learning Patterns Selection -->
+    <div id="patternSelection" class="mb-12">
+      <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">🌟 اختاري نمط التعلم المفضل لديكِ</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="pattern-card visual-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('visual')">
+          <div class="text-center"><div class="text-4xl mb-4">👁️</div><h3 class="text-xl font-bold mb-2">النمط البصري</h3><p class="text-sm opacity-90">أحب رؤية الصور والرسوم البيانية</p></div>
+        </div>
+        <div class="pattern-card analytical-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('analytical')">
+          <div class="text-center"><div class="text-4xl mb-4">🧮</div><h3 class="text-xl font-bold mb-2">النمط التحليلي</h3><p class="text-sm opacity-90">أفضل الأسئلة النصية والحسابات</p></div>
+        </div>
+        <div class="pattern-card interactive-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('interactive')">
+          <div class="text-center"><div class="text-4xl mb-4">🎮</div><h3 class="text-xl font-bold mb-2">النمط التفاعلي</h3><p class="text-sm opacity-90">أحب التفاعل والأدوات الرقمية</p></div>
+        </div>
+        <div class="pattern-card comprehensive-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('comprehensive')">
+          <div class="text-center"><div class="text-4xl mb-4">📚</div><h3 class="text-xl font-bold mb-2">النمط الشامل</h3><p class="text-sm opacity-90">أريد رؤية جميع الأسئلة معًا</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="questionsContainer" class="hidden">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">الأسئلة المختارة</h2>
+        <button onclick="resetSelection()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">🔄 تغيير النمط</button>
+      </div>
+      <div id="questionsList" class="space-y-8"></div>
     </div>
   </div>
 
-  <!-- السؤال الثاني -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الثاني: تحليل الصورة</h3>
-    <p class="mb-2">بناءً على الصورة المعطاة، ما هو نوع الدالة الممثلة؟</p>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1l5a3wHX84fUaRbAuSEVfveucszK05_kD"
-           alt="صورة السؤال الثاني"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
+  <script>
+    /* أرقام الأسئلة لكل نمط */
+    const questions = {
+      visual: [2,5,6,7,8,9,10,11],
+      analytical: [3,4],
+      interactive: [1],
+      comprehensive: [1,2,3,4,5,6,7,8,9,10,11]
+    };
 
-  <!-- السؤال الثالث -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الثالث: مدى الدالة</h3>
-    <p class="mb-2">ما هو مدى الدالة f(x) = [x+2] ؟</p>
-    <ul class="list-disc pr-6 text-gray-700">
-      <li>A: ℚ (الأعداد النسبية)</li>
-      <li>B: ℕ (الأعداد الطبيعية)</li>
-      <li>C: ℤ (الأعداد الصحيحة)</li>
-      <li>D: ℝ (الأعداد الحقيقية)</li>
-    </ul>
-  </div>
-
-  <!-- السؤال الرابع -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الرابع: حساب القيمة</h3>
-    <p class="mb-2">احسبي قيمة [ -4.8 ] = ؟</p>
-    <ul class="list-disc pr-6 text-gray-700">
-      <li>A: 0</li>
-      <li>B: -4</li>
-      <li>C: -5</li>
-      <li>D: 4</li>
-    </ul>
-  </div>
-
-  <!-- السؤال الخامس -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الخامس</h3>
-    <p class="mb-2">بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:</p>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1_kQ7x38kpFKlDf9VTtMt9FESJ9FIeSs2"
-           alt="صورة السؤال الخامس"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-  <!-- السؤال السادس -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال السادس</h3>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1ohLVEvgn8kaTvmCpRrFKTRq7Zn9tgfiW"
-           alt="صورة السؤال السادس"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-  <!-- السؤال السابع -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال السابع</h3>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1vaACoTHwhtkl-WHluov6bEOs4FxNCFnc"
-           alt="صورة السؤال السابع"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-  <!-- السؤال الثامن -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الثامن</h3>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1vaACoTHwhtkl-WHluov6bEOs4FxNCFnc"
-           alt="صورة السؤال الثامن"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-  <!-- السؤال التاسع -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال التاسع</h3>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1otV0-2hx-0ZGV2EBg2HXgYeAD6AUTcUu"
-           alt="صورة السؤال التاسع"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-  <!-- السؤال العاشر -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال العاشر</h3>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1otV0-2hx-0ZGV2EBg2HXgYeAD6AUTcUu"
-           alt="صورة السؤال العاشر"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-  <!-- السؤال الحادي عشر -->
-  <div class="question-card">
-    <h3 class="text-xl font-bold mb-4">السؤال الحادي عشر: التمثيل الصحيح للدالة</h3>
-    <p class="mb-2">ما هو التمثيل الصحيح للدالة f(x) = |x| + 1 ؟</p>
-    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
-      <img src="https://drive.google.com/uc?export=view&id=1khOE8w5h2cDRdsbb-opMrFXclIqZYt83"
-           alt="صورة السؤال الحادي عشر"
-           class="w-full rounded-lg shadow-md">
-    </div>
-  </div>
-
-</body>
-</html>
+    /* بيانات الأسئلة — تم استبدال الصور بروابط Google Drive المباشرة داخل إطار مستطيل */
+    const questionData = {
+      1: {
+        type: 'interactive',
+        title: 'السؤال الأول: رسم الدالة',
+        question: 'ارسمي الدالة f(x) = |x| - 2 باستخدام جيوجبرا، ما هو شكل الرسم البياني؟',
+        formula: 'f(x) = |x| - 2',
+        geogebra: 'https://www.geogebra.org/classic?lang=ar',
+        options: {
+          A: 'خط مستقيم يمر بالأصل',
+          B: 'قطع مكافئ يفتح للأعلى',
+          C: 'شكل V مع رأس عند النقطة (0, -2)',
+          D: 'دائرة مركزها الأصل'
+        },
+        correct: 'C'
+      },
+      2: {
+        type: 'visual',
+        title: 'السؤال الثاني: تحليل الصورة',
+        question: 'بناءً على الصورة المعطاة، ما هو نوع الدالة الممثلة؟',
+        image: 'https://drive.google.com/uc?export=view&id=1l5a3wHX84fUaRbAuSEVfveucszK05_kD',
+        options: { A: 'دالة
