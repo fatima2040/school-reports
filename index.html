@@ -1,483 +1,147 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الأسئلة التفاعلي - أنماط التعلم</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; }
-        .pattern-card {
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .pattern-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        .visual-pattern { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .analytical-pattern { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .interactive-pattern { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-        .comprehensive-pattern { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-        
-        .question-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        .question-card:hover {
-            transform: translateY(-2px);
-            box-shadow:0 15px 40px rgba(0,0,0,0.15);
-        }
-        
-        .geogebra-container {
-            border: 3px solid #4facfe;
-            border-radius: 10px;
-            background: #f8faff;
-        }
-        
-        .image-placeholder {
-            background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
-                        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
-                        linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
-                        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام الأسئلة التفاعلي - أنماط التعلم</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+    body { font-family: 'Tajawal', sans-serif; }
+    .question-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+    }
+    .question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">🎯 نظام الأسئلة التفاعلي</h1>
-            <p class="text-lg text-gray-600">اختاري نمط التعلم المناسب لك واستمتعي بحل الأسئلة</p>
-        </div>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen p-6">
 
-        <!-- Learning Patterns Selection -->
-        <div id="patternSelection" class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">🌟 اختاري نمط التعلم المفضل لديك</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Visual Pattern -->
-                <div class="pattern-card visual-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('visual')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">👁️</div>
-                        <h3 class="text-xl font-bold mb-2">النمط البصري</h3>
-                        <p class="text-sm opacity-90">أحب رؤية الصور والرسوم البيانية</p>
-                    </div>
-                </div>
-
-                <!-- Analytical Pattern -->
-                <div class="pattern-card analytical-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('analytical')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">🧮</div>
-                        <h3 class="text-xl font-bold mb-2">النمط التحليلي</h3>
-                        <p class="text-sm opacity-90">أفضل الأسئلة النصية والحسابات</p>
-                    </div>
-                </div>
-
-                <!-- Interactive Pattern -->
-                <div class="pattern-card interactive-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('interactive')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">🎮</div>
-                        <h3 class="text-xl font-bold mb-2">النمط التفاعلي</h3>
-                        <p class="text-sm opacity-90">أحب التفاعل والأدوات الرقمية</p>
-                    </div>
-                </div>
-
-                <!-- Comprehensive Pattern -->
-                <div class="pattern-card comprehensive-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('comprehensive')">
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">📚</div>
-                        <h3 class="text-xl font-bold mb-2">النمط الشامل</h3>
-                        <p class="text-sm opacity-90">أريد رؤية جميع الأسئلة معاً</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Questions Container -->
-        <div id="questionsContainer" class="hidden">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800">الأسئلة المختارة</h2>
-                <button onclick="resetSelection()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    🔄 تغيير النمط
-                </button>
-            </div>
-            
-            <div id="questionsList" class="space-y-8"></div>
-        </div>
+  <!-- السؤال الأول -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الأول: رسم الدالة</h3>
+    <p class="mb-2">ارسمي الدالة f(x) = |x| - 2 باستخدام جيوجبرا، ما هو شكل الرسم البياني؟</p>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg text-center">
+      <a href="https://www.geogebra.org/classic?lang=ar" target="_blank"
+         class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold">
+        🚀 افتحي جيوجبرا كلاسيك
+      </a>
     </div>
+  </div>
 
-    <script>
-        const questions = {
-            visual: [2, 5, 6, 7, 8, 9, 10, 11], // Questions with images
-            analytical: [3, 4], // Text-based calculation questions
-            interactive: [1], // Questions with interactive tools
-            comprehensive: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // All questions
-        };
+  <!-- السؤال الثاني -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الثاني: تحليل الصورة</h3>
+    <p class="mb-2">بناءً على الصورة المعطاة، ما هو نوع الدالة الممثلة؟</p>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1l5a3wHX84fUaRbAuSEVfveucszK05_kD"
+           alt="صورة السؤال الثاني"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
 
-        const questionData = {
-            1: {
-                type: 'interactive',
-                title: 'السؤال الأول: رسم الدالة',
-                question: 'ارسمي الدالة f(x) = |x| - 2 باستخدام جيوجبرا، ما هو شكل الرسم البياني؟',
-                formula: 'f(x) = |x| - 2',
-                geogebra: 'https://www.geogebra.org/classic?lang=ar',
-                options: {
-                    A: 'خط مستقيم يمر بالأصل',
-                    B: 'قطع مكافئ يفتح للأعلى',
-                    C: 'شكل V مع رأس عند النقطة (0, -2)',
-                    D: 'دائرة مركزها الأصل'
-                },
-                correct: 'C'
-            },
-            2: {
-                type: 'visual',
-                title: 'السؤال الثاني: تحليل الصورة',
-                question: 'بناءً على الصورة المعطاة، ما هو نوع الدالة الممثلة؟',
-                image: 'https://ibb.co/BHHWTZ3H',
-                options: {
-                    A: 'دالة خطية',
-                    B: 'دالة تربيعية',
-                    C: 'دالة مطلقة',
-                    D: 'دالة أسية'
-                },
-                correct: 'B'
-            },
-            3: {
-                type: 'analytical',
-                title: 'السؤال الثالث: مدى الدالة',
-                question: 'ما هو مدى الدالة التالية:',
-                formula: 'f(x) = [x + 2]',
-                options: {
-                    A: 'ℚ (الأعداد النسبية)',
-                    B: 'ℕ (الأعداد الطبيعية)',
-                    C: 'ℤ (الأعداد الصحيحة)',
-                    D: 'ℝ (الأعداد الحقيقية)'
-                },
-                correct: 'C'
-            },
-            4: {
-                type: 'analytical',
-                title: 'السؤال الرابع: حساب القيمة',
-                question: 'احسبي قيمة:',
-                formula: '[-4.8] = ?',
-                options: {
-                    A: '0',
-                    B: '-4',
-                    C: '-5',
-                    D: '4'
-                },
-                correct: 'C'
-            },
-            5: {
-                type: 'visual',
-                title: 'السؤال الخامس',
-                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
-                image: 'https://ibb.co/84bLz6rm',
-                options: {
-                    A: 'الخيار الأول',
-                    B: 'الخيار الثاني',
-                    C: 'الخيار الثالث',
-                    D: 'الخيار الرابع'
-                },
-                correct: 'A'
-            },
-            6: {
-                type: 'visual',
-                title: 'السؤال السادس',
-                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
-                image: 'https://ibb.co/99kXvSbx',
-                options: {
-                    A: 'الخيار الأول',
-                    B: 'الخيار الثاني',
-                    C: 'الخيار الثالث',
-                    D: 'الخيار الرابع'
-                },
-                correct: 'B'
-            },
-            7: {
-                type: 'visual',
-                title: 'السؤال السابع',
-                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
-                image: 'https://ibb.co/RkSFxq68',
-                options: {
-                    A: 'الخيار الأول',
-                    B: 'الخيار الثاني',
-                    C: 'الخيار الثالث',
-                    D: 'الخيار الرابع'
-                },
-                correct: 'C'
-            },
-            8: {
-                type: 'visual',
-                title: 'السؤال الثامن',
-                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
-                image: 'https://ibb.co/2YcLNjSX',
-                options: {
-                    A: 'الخيار الأول',
-                    B: 'الخيار الثاني',
-                    C: 'الخيار الثالث',
-                    D: 'الخيار الرابع'
-                },
-                correct: 'D'
-            },
-            9: {
-                type: 'visual',
-                title: 'السؤال التاسع',
-                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
-                image: 'https://ibb.co/rGBpcDs4',
-                options: {
-                    A: 'الخيار الأول',
-                    B: 'الخيار الثاني',
-                    C: 'الخيار الثالث',
-                    D: 'الخيار الرابع'
-                },
-                correct: 'A'
-            },
-            10: {
-                type: 'visual',
-                title: 'السؤال العاشر',
-                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
-                image: 'https://ibb.co/Rp9CrpT6',
-                options: {
-                    A: 'الخيار الأول',
-                    B: 'الخيار الثاني',
-                    C: 'الخيار الثالث',
-                    D: 'الخيار الرابع'
-                },
-                correct: 'B'
-            },
-            11: {
-                type: 'visual',
-                title: 'السؤال الحادي عشر: التمثيل الصحيح للدالة',
-                question: 'ما هو التمثيل الصحيح للدالة:',
-                formula: 'f(x) = |x| + 1',
-                image: 'https://ibb.co/S4qdD5tx',
-                options: {
-                    A: 'الرسم البياني الأول',
-                    B: 'الرسم البياني الثاني',
-                    C: 'الرسم البياني الثالث',
-                    D: 'الرسم البياني الرابع'
-                },
-                correct: 'A'
-            }
-        };
+  <!-- السؤال الثالث -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الثالث: مدى الدالة</h3>
+    <p class="mb-2">ما هو مدى الدالة f(x) = [x+2] ؟</p>
+    <ul class="list-disc pr-6 text-gray-700">
+      <li>A: ℚ (الأعداد النسبية)</li>
+      <li>B: ℕ (الأعداد الطبيعية)</li>
+      <li>C: ℤ (الأعداد الصحيحة)</li>
+      <li>D: ℝ (الأعداد الحقيقية)</li>
+    </ul>
+  </div>
 
-        function selectPattern(pattern) {
-            document.getElementById('patternSelection').classList.add('hidden');
-            document.getElementById('questionsContainer').classList.remove('hidden');
-            
-            const questionsList = document.getElementById('questionsList');
-            questionsList.innerHTML = '';
-            
-            const selectedQuestions = questions[pattern];
-            
-            selectedQuestions.forEach((questionNum, index) => {
-                const question = questionData[questionNum];
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question-card p-6 mb-6';
-                
-                let questionContent = `
-                    <div class="flex items-center mb-4">
-                        <div class="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
-                            ${index + 1}
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800">${question.title}</h3>
-                    </div>
-                    
-                    <!-- Question Box -->
-                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
-                        <p class="text-lg font-medium text-gray-800 mb-4">${question.question}</p>
-                `;
-                
-                // Add formula if exists
-                if (question.formula) {
-                    questionContent += `
-                        <div class="bg-white p-4 rounded-lg text-center text-xl font-bold text-blue-800 mb-4 border-2 border-blue-300">
-                            ${question.formula}
-                        </div>
-                    `;
-                }
-                
-                // Add image if exists
-                if (question.image) {
-                    questionContent += `
-                        <div class="text-center mb-4">
-                            <div class="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-lg">
-                                <img src="${question.image}" alt="صورة السؤال" class="w-full max-w-2xl mx-auto rounded-lg shadow-md" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <div class="hidden text-center p-8 bg-gray-100 rounded-lg">
-                                    <div class="text-4xl mb-2">🖼️</div>
-                                    <p class="text-gray-600 mb-2">لا يمكن تحميل الصورة</p>
-                                    <a href="${question.image}" target="_blank" class="text-blue-500 hover:text-blue-700 underline font-bold">
-                                        📎 عرض الصورة في نافذة جديدة
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Add GeoGebra link if exists
-                if (question.geogebra) {
-                    questionContent += `
-                        <div class="geogebra-container p-4 mb-4">
-                            <div class="text-center">
-                                <h4 class="text-lg font-bold text-blue-800 mb-2">🎯 أداة جيوجبرا التفاعلية</h4>
-                                <a href="${question.geogebra}" target="_blank" 
-                                   class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
-                                    🚀 افتحي جيوجبرا كلاسيك
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                questionContent += `</div>`;
-                
-                // Add options
-                questionContent += `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" data-question="${questionNum}">
-                `;
-                
-                Object.entries(question.options).forEach(([key, value]) => {
-                    questionContent += `
-                        <button class="option-btn bg-white hover:bg-blue-50 border-2 border-gray-300 hover:border-blue-500 p-4 rounded-lg transition-all text-right" 
-                                onclick="selectOption(this, '${key}', ${questionNum})">
-                            <span class="font-bold text-blue-600">(${key})</span> ${value}
-                        </button>
-                    `;
-                });
-                
-                questionContent += `
-                    </div>
-                    <div id="feedback-${questionNum}" class="mt-4 hidden"></div>
-                `;
-                
-                questionDiv.innerHTML = questionContent;
-                questionsList.appendChild(questionDiv);
-            });
-            
-            // Add completion message
-            const completionDiv = document.createElement('div');
-            completionDiv.className = 'text-center p-8 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl';
-            completionDiv.innerHTML = `
-                <div class="text-4xl mb-4">🎉</div>
-                <h3 class="text-2xl font-bold mb-2">أحسنت!</h3>
-                <p class="text-lg">لقد أكملت جميع الأسئلة المناسبة لنمط تعلمك</p>
-            `;
-            questionsList.appendChild(completionDiv);
-        }
+  <!-- السؤال الرابع -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الرابع: حساب القيمة</h3>
+    <p class="mb-2">احسبي قيمة [ -4.8 ] = ؟</p>
+    <ul class="list-disc pr-6 text-gray-700">
+      <li>A: 0</li>
+      <li>B: -4</li>
+      <li>C: -5</li>
+      <li>D: 4</li>
+    </ul>
+  </div>
 
-        function resetSelection() {
-            document.getElementById('patternSelection').classList.remove('hidden');
-            document.getElementById('questionsContainer').classList.add('hidden');
-        }
+  <!-- السؤال الخامس -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الخامس</h3>
+    <p class="mb-2">بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:</p>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1_kQ7x38kpFKlDf9VTtMt9FESJ9FIeSs2"
+           alt="صورة السؤال الخامس"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
 
-        function selectOption(button, selectedOption, questionNum) {
-            const question = questionData[questionNum];
-            const isCorrect = selectedOption === question.correct;
-            const feedbackDiv = document.getElementById(`feedback-${questionNum}`);
-            
-            // Remove previous selections and disable all buttons
-            const siblings = button.parentNode.querySelectorAll('.option-btn');
-            siblings.forEach(btn => {
-                btn.disabled = true;
-                btn.classList.remove('bg-blue-100', 'border-blue-500', 'bg-green-100', 'border-green-500', 'bg-red-100', 'border-red-500');
-                btn.classList.add('bg-gray-100', 'border-gray-300', 'opacity-60');
-            });
-            
-            // Highlight correct answer
-            siblings.forEach(btn => {
-                const btnOption = btn.onclick.toString().match(/'([A-D])'/)[1];
-                if (btnOption === question.correct) {
-                    btn.classList.remove('bg-gray-100', 'border-gray-300', 'opacity-60');
-                    btn.classList.add('bg-green-100', 'border-green-500', 'opacity-100');
-                }
-            });
-            
-            // Highlight selected answer if wrong
-            if (!isCorrect) {
-                button.classList.remove('bg-gray-100', 'border-gray-300');
-                button.classList.add('bg-red-100', 'border-red-500', 'opacity-100');
-            }
-            
-            // Show feedback with animation
-            feedbackDiv.classList.remove('hidden');
-            
-            if (isCorrect) {
-                const encouragements = [
-                    '🎉 ممتاز! إجابة صحيحة!',
-                    '👏 أحسنت! إجابة رائعة!',
-                    '⭐ عظيم! أنت على الطريق الصحيح!',
-                    '🌟 برافو! إجابة مثالية!',
-                    '🎯 ممتاز جداً! استمري هكذا!',
-                    '💫 رائع! أنت تتقدمين بشكل ممتاز!'
-                ];
-                const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
-                
-                feedbackDiv.innerHTML = `
-                    <div class="bg-gradient-to-r from-green-400 to-emerald-500 text-white p-6 rounded-xl text-center animate-bounce">
-                        <div class="text-3xl mb-2">🎉</div>
-                        <h4 class="text-xl font-bold mb-2">${randomEncouragement}</h4>
-                        <p class="text-green-100">الإجابة الصحيحة هي: (${question.correct})</p>
-                    </div>
-                `;
-                
-                // Add confetti effect
-                createConfetti();
-                
-            } else {
-                feedbackDiv.innerHTML = `
-                    <div class="bg-gradient-to-r from-orange-400 to-red-400 text-white p-6 rounded-xl text-center">
-                        <div class="text-3xl mb-2">💪</div>
-                        <h4 class="text-xl font-bold mb-2">لا بأس! تعلمي من الأخطاء</h4>
-                        <p class="text-red-100 mb-2">اخترت: (${selectedOption})</p>
-                        <p class="text-red-100">الإجابة الصحيحة هي: (${question.correct})</p>
-                        <p class="text-red-100 mt-2 text-sm">💡 راجعي المفهوم وحاولي مرة أخرى!</p>
-                    </div>
-                `;
-            }
-        }
-        
-        function createConfetti() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-10px';
-                confetti.style.width = '10px';
-                confetti.style.height = '10px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.borderRadius = '50%';
-                confetti.style.pointerEvents = 'none';
-                confetti.style.zIndex = '9999';
-                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
-                
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-        
-        // Add CSS animation for confetti
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(360deg);
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f9ee2960b5881e',t:'MTc1Nzk1ODI0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <!-- السؤال السادس -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال السادس</h3>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1ohLVEvgn8kaTvmCpRrFKTRq7Zn9tgfiW"
+           alt="صورة السؤال السادس"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
+
+  <!-- السؤال السابع -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال السابع</h3>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1vaACoTHwhtkl-WHluov6bEOs4FxNCFnc"
+           alt="صورة السؤال السابع"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
+
+  <!-- السؤال الثامن -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الثامن</h3>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1vaACoTHwhtkl-WHluov6bEOs4FxNCFnc"
+           alt="صورة السؤال الثامن"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
+
+  <!-- السؤال التاسع -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال التاسع</h3>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1otV0-2hx-0ZGV2EBg2HXgYeAD6AUTcUu"
+           alt="صورة السؤال التاسع"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
+
+  <!-- السؤال العاشر -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال العاشر</h3>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1otV0-2hx-0ZGV2EBg2HXgYeAD6AUTcUu"
+           alt="صورة السؤال العاشر"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
+
+  <!-- السؤال الحادي عشر -->
+  <div class="question-card">
+    <h3 class="text-xl font-bold mb-4">السؤال الحادي عشر: التمثيل الصحيح للدالة</h3>
+    <p class="mb-2">ما هو التمثيل الصحيح للدالة f(x) = |x| + 1 ؟</p>
+    <div class="bg-white border-2 border-blue-300 rounded-xl p-4 shadow-lg max-w-xl mx-auto">
+      <img src="https://drive.google.com/uc?export=view&id=1khOE8w5h2cDRdsbb-opMrFXclIqZYt83"
+           alt="صورة السؤال الحادي عشر"
+           class="w-full rounded-lg shadow-md">
+    </div>
+  </div>
+
+</body>
 </html>
