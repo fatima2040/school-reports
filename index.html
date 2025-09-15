@@ -98,4 +98,262 @@
         title: 'السؤال الثاني: تحليل الصورة',
         question: 'بناءً على الصورة المعطاة، ما هو نوع الدالة الممثلة؟',
         image: 'https://drive.google.com/uc?export=view&id=1l5a3wHX84fUaRbAuSEVfveucszK05_kD',
-        options: { A: 'دالة
+        options: { A: 'دالة خطية', B: 'دالة تربيعية', C: 'دالة مطلقة', D: 'دالة أسية' },
+        correct: 'B'
+      },
+      3: {
+        type: 'analytical',
+        title: 'السؤال الثالث: مدى الدالة',
+        question: 'ما هو مدى الدالة التالية:',
+        formula: 'f(x) = [x + 2]',
+        options: { A: 'ℚ (الأعداد النسبية)', B: 'ℕ (الأعداد الطبيعية)', C: 'ℤ (الأعداد الصحيحة)', D: 'ℝ (الأعداد الحقيقية)' },
+        correct: 'C'
+      },
+      4: {
+        type: 'analytical',
+        title: 'السؤال الرابع: حساب القيمة',
+        question: 'احسبي قيمة:',
+        formula: '[-4.8] = ?',
+        options: { A: '0', B: '-4', C: '-5', D: '4' },
+        correct: 'C'
+      },
+      5: {
+        type: 'visual',
+        title: 'السؤال الخامس',
+        question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+        image: 'https://drive.google.com/uc?export=view&id=1_kQ7x38kpFKlDf9VTtMt9FESJ9FIeSs2',
+        options: { A: 'الخيار الأول', B: 'الخيار الثاني', C: 'الخيار الثالث', D: 'الخيار الرابع' },
+        correct: 'A'
+      },
+      6: {
+        type: 'visual',
+        title: 'السؤال السادس',
+        question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+        image: 'https://drive.google.com/uc?export=view&id=1ohLVEvgn8kaTvmCpRrFKTRq7Zn9tgfiW',
+        options: { A: 'الخيار الأول', B: 'الخيار الثاني', C: 'الخيار الثالث', D: 'الخيار الرابع' },
+        correct: 'B'
+      },
+      7: {
+        type: 'visual',
+        title: 'السؤال السابع',
+        question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+        image: 'https://drive.google.com/uc?export=view&id=1vaACoTHwhtkl-WHluov6bEOs4FxNCFnc',
+        options: { A: 'الخيار الأول', B: 'الخيار الثاني', C: 'الخيار الثالث', D: 'الخيار الرابع' },
+        correct: 'C'
+      },
+      8: {
+        type: 'visual',
+        title: 'السؤال الثامن',
+        question: 'بناءً على الصورة المعطاة, اختاري الإجابة الصحيحة:',
+        image: 'https://drive.google.com/uc?export=view&id=1vaACoTHwhtkl-WHluov6bEOs4FxNCFnc',
+        options: { A: 'الخيار الأول', B: 'الخيار الثاني', C: 'الخيار الثالث', D: 'الخيار الرابع' },
+        correct: 'D'
+      },
+      9: {
+        type: 'visual',
+        title: 'السؤال التاسع',
+        question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+        image: 'https://drive.google.com/uc?export=view&id=1otV0-2hx-0ZGV2EBg2HXgYeAD6AUTcUu',
+        options: { A: 'الخيار الأول', B: 'الخيار الثاني', C: 'الخيار الثالث', D: 'الخيار الرابع' },
+        correct: 'A'
+      },
+      10: {
+        type: 'visual',
+        title: 'السؤال العاشر',
+        question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+        image: 'https://drive.google.com/uc?export=view&id=1otV0-2hx-0ZGV2EBg2HXgYeAD6AUTcUu',
+        options: { A: 'الخيار الأول', B: 'الخيار الثاني', C: 'الخيار الثالث', D: 'الخيار الرابع' },
+        correct: 'B'
+      },
+      11: {
+        type: 'visual',
+        title: 'السؤال الحادي عشر: التمثيل الصحيح للدالة',
+        question: 'ما هو التمثيل الصحيح للدالة:',
+        formula: 'f(x) = |x| + 1',
+        image: 'https://drive.google.com/uc?export=view&id=1khOE8w5h2cDRdsbb-opMrFXclIqZYt83',
+        options: { A: 'الرسم البياني الأول', B: 'الرسم البياني الثاني', C: 'الرسم البياني الثالث', D: 'الرسم البياني الرابع' },
+        correct: 'A'
+      }
+    };
+
+    function selectPattern(pattern) {
+      document.getElementById('patternSelection').classList.add('hidden');
+      document.getElementById('questionsContainer').classList.remove('hidden');
+
+      const list = document.getElementById('questionsList');
+      list.innerHTML = '';
+      const selected = questions[pattern];
+
+      selected.forEach((num, index) => {
+        const q = questionData[num];
+        const card = document.createElement('div');
+        card.className = 'question-card p-6';
+
+        let html = `
+          <div class="flex items-center mb-4">
+            <div class="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold ml-3">
+              ${index + 1}
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">${q.title}</h3>
+          </div>
+
+          <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+            <p class="text-lg font-medium text-gray-800 mb-4">${q.question}</p>
+        `;
+
+        if (q.formula) {
+          html += `
+            <div class="bg-white p-4 rounded-lg text-center text-xl font-bold text-blue-800 mb-4 border-2 border-blue-300">
+              ${q.formula}
+            </div>
+          `;
+        }
+
+        if (q.image) {
+          html += `
+            <div class="text-center mb-4">
+              <div class="img-frame max-w-2xl mx-auto">
+                <img src="${q.image}" referrerpolicy="no-referrer"
+                     alt="صورة السؤال"
+                     class="w-full rounded-lg shadow-md"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="hidden text-center p-8 bg-gray-100 rounded-lg">
+                  <div class="text-4xl mb-2">🖼️</div>
+                  <p class="text-gray-600 mb-2">لا يمكن تحميل الصورة</p>
+                  <a href="${q.image}" target="_blank" class="text-blue-500 hover:text-blue-700 underline font-bold">📎 فتح الصورة في تبويب جديد</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (q.geogebra) {
+          html += `
+            <div class="geogebra-container p-4 mb-4">
+              <div class="text-center">
+                <h4 class="text-lg font-bold text-blue-800 mb-2">🎯 أداة جيوجبرا التفاعلية</h4>
+                <a href="${q.geogebra}" target="_blank"
+                   class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+                  🚀 افتحي جيوجبرا كلاسيك
+                </a>
+              </div>
+            </div>
+          `;
+        }
+
+        html += `</div>`;
+
+        /* خيارات الإجابة */
+        html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4" data-question="${num}">`;
+        Object.entries(q.options).forEach(([key, value]) => {
+          html += `
+            <button class="option-btn bg-white hover:bg-blue-50 border-2 border-gray-300 hover:border-blue-500 p-4 rounded-lg transition-all text-right"
+                    onclick="selectOption(this, '${key}', ${num})">
+              <span class="font-bold text-blue-600">(${key})</span> ${value}
+            </button>
+          `;
+        });
+        html += `</div><div id="feedback-${num}" class="mt-4 hidden"></div>`;
+
+        card.innerHTML = html;
+        list.appendChild(card);
+      });
+
+      /* رسالة إنهاء */
+      const done = document.createElement('div');
+      done.className = 'text-center p-8 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl';
+      done.innerHTML = `
+        <div class="text-4xl mb-4">🎉</div>
+        <h3 class="text-2xl font-bold mb-2">أحسنتِ!</h3>
+        <p class="text-lg">لقد أكملتِ جميع الأسئلة المناسبة لنمط تعلمك</p>
+      `;
+      list.appendChild(done);
+    }
+
+    function resetSelection() {
+      document.getElementById('patternSelection').classList.remove('hidden');
+      document.getElementById('questionsContainer').classList.add('hidden');
+    }
+
+    function selectOption(button, selectedOption, questionNum) {
+      const q = questionData[questionNum];
+      const isCorrect = selectedOption === q.correct;
+      const feedbackDiv = document.getElementById(`feedback-${questionNum}`);
+
+      const siblings = button.parentNode.querySelectorAll('.option-btn');
+      siblings.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove('bg-blue-100','border-blue-500','bg-green-100','border-green-500','bg-red-100','border-red-500');
+        btn.classList.add('bg-gray-100','border-gray-300','opacity-60');
+      });
+
+      siblings.forEach(btn => {
+        const btnOption = btn.onclick.toString().match(/'([A-D])'/)[1];
+        if (btnOption === q.correct) {
+          btn.classList.remove('bg-gray-100','border-gray-300','opacity-60');
+          btn.classList.add('bg-green-100','border-green-500','opacity-100');
+        }
+      });
+
+      if (!isCorrect) {
+        button.classList.remove('bg-gray-100','border-gray-300');
+        button.classList.add('bg-red-100','border-red-500','opacity-100');
+      }
+
+      feedbackDiv.classList.remove('hidden');
+      if (isCorrect) {
+        const encouragements = [
+          '🎉 ممتاز! إجابة صحيحة!',
+          '👏 أحسنتِ! إجابة رائعة!',
+          '⭐ عظيم! أنتِ على الطريق الصحيح!',
+          '🌟 برافو! إجابة مثالية!',
+          '🎯 ممتاز جدًا! استمري هكذا!',
+          '💫 رائع! أنتِ تتقدمين بشكل ممتاز!'
+        ];
+        const randomEnc = encouragements[Math.floor(Math.random() * encouragements.length)];
+        feedbackDiv.innerHTML = `
+          <div class="bg-gradient-to-r from-green-400 to-emerald-500 text-white p-6 rounded-xl text-center animate-bounce">
+            <div class="text-3xl mb-2">🎉</div>
+            <h4 class="text-xl font-bold mb-2">${randomEnc}</h4>
+            <p class="text-green-100">الإجابة الصحيحة هي: (${q.correct})</p>
+          </div>
+        `;
+        createConfetti();
+      } else {
+        feedbackDiv.innerHTML = `
+          <div class="bg-gradient-to-r from-orange-400 to-red-400 text-white p-6 rounded-xl text-center">
+            <div class="text-3xl mb-2">💪</div>
+            <h4 class="text-xl font-bold mb-2">لا بأس! تعلمي من الأخطاء</h4>
+            <p class="text-red-100 mb-2">اخترتِ: (${selectedOption})</p>
+            <p class="text-red-100">الإجابة الصحيحة هي: (${q.correct})</p>
+            <p class="text-red-100 mt-2 text-sm">💡 راجعي المفهوم وحاولي مرة أخرى!</p>
+          </div>
+        `;
+      }
+    }
+
+    function createConfetti() {
+      const colors = ['#ff6b6b','#4ecdc4','#45b7d1','#96ceb4','#ffeaa7','#dda0dd'];
+      for (let i = 0; i < 50; i++) {
+        const dot = document.createElement('div');
+        dot.style.position = 'fixed';
+        dot.style.left = Math.random() * 100 + 'vw';
+        dot.style.top = '-10px';
+        dot.style.width = '10px';
+        dot.style.height = '10px';
+        dot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        dot.style.borderRadius = '50%';
+        dot.style.pointerEvents = 'none';
+        dot.style.zIndex = '9999';
+        dot.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 5000);
+      }
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `@keyframes fall { to { transform: translateY(100vh) rotate(360deg);} }`;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
