@@ -1,315 +1,483 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>نظام التقارير المدرسية</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // ألوان موف + تركوازي
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors:{
-            primary:"#7C3AED", // موف
-            primaryDark:"#6D28D9",
-            accent:"#14B8A6",  // تركوازي
-            accentDark:"#0D9488"
-          },
-          boxShadow:{
-            soft:"0 10px 25px rgba(0,0,0,.06)"
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الأسئلة التفاعلي - أنماط التعلم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+        .pattern-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-      }
-    }
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-    body{font-family:'Cairo',sans-serif;background:linear-gradient(180deg,#faf7ff, #f0fffb);}
-    .tab-active{background:#fff;border-color:#7C3AED;color:#7C3AED}
-    .glass{backdrop-filter:saturate(180%) blur(10px);}
-    @media print{
-      .no-print{display:none!important}
-      body{background:#fff}
-      .card{box-shadow:none!important;border:0!important}
-    }
-  </style>
+        .pattern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .visual-pattern { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .analytical-pattern { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .interactive-pattern { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .comprehensive-pattern { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow:0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .geogebra-container {
+            border: 3px solid #4facfe;
+            border-radius: 10px;
+            background: #f8faff;
+        }
+        
+        .image-placeholder {
+            background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+    </style>
 </head>
-<body class="min-h-screen text-gray-800">
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">🎯 نظام الأسئلة التفاعلي</h1>
+            <p class="text-lg text-gray-600">اختاري نمط التعلم المناسب لك واستمتعي بحل الأسئلة</p>
+        </div>
 
-  <!-- شريط علوي -->
-  <header class="no-print sticky top-0 z-40 glass bg-white/70 border-b">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent grid place-items-center text-white font-bold">SR</div>
-      <div>
-        <h1 class="text-xl sm:text-2xl font-bold text-primary">نظام التقارير المدرسية</h1>
-        <p class="text-xs sm:text-sm text-gray-600">اليومي • الأسبوعي • الشهري • النشاط • تواصل وليّ الأمر • حصة الانتظار</p>
-      </div>
-      <div class="ms-auto hidden sm:flex items-center gap-2 text-xs text-gray-500">
-        <span>الثانوية الثانية والخمسون</span>
-        <span class="w-1 h-1 rounded-full bg-gray-300"></span>
-        <span>منسقة التميز: فاطمة سعد العمري</span>
-      </div>
+        <!-- Learning Patterns Selection -->
+        <div id="patternSelection" class="mb-12">
+            <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">🌟 اختاري نمط التعلم المفضل لديك</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Visual Pattern -->
+                <div class="pattern-card visual-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('visual')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">👁️</div>
+                        <h3 class="text-xl font-bold mb-2">النمط البصري</h3>
+                        <p class="text-sm opacity-90">أحب رؤية الصور والرسوم البيانية</p>
+                    </div>
+                </div>
+
+                <!-- Analytical Pattern -->
+                <div class="pattern-card analytical-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('analytical')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🧮</div>
+                        <h3 class="text-xl font-bold mb-2">النمط التحليلي</h3>
+                        <p class="text-sm opacity-90">أفضل الأسئلة النصية والحسابات</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Pattern -->
+                <div class="pattern-card interactive-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('interactive')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🎮</div>
+                        <h3 class="text-xl font-bold mb-2">النمط التفاعلي</h3>
+                        <p class="text-sm opacity-90">أحب التفاعل والأدوات الرقمية</p>
+                    </div>
+                </div>
+
+                <!-- Comprehensive Pattern -->
+                <div class="pattern-card comprehensive-pattern text-white p-6 rounded-xl cursor-pointer" onclick="selectPattern('comprehensive')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">📚</div>
+                        <h3 class="text-xl font-bold mb-2">النمط الشامل</h3>
+                        <p class="text-sm opacity-90">أريد رؤية جميع الأسئلة معاً</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Container -->
+        <div id="questionsContainer" class="hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">الأسئلة المختارة</h2>
+                <button onclick="resetSelection()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    🔄 تغيير النمط
+                </button>
+            </div>
+            
+            <div id="questionsList" class="space-y-8"></div>
+        </div>
     </div>
 
-    <!-- تبويبات -->
-    <nav class="border-t bg-white/60">
-      <div class="max-w-6xl mx-auto px-2 sm:px-4">
-        <div id="tabs" class="flex overflow-x-auto gap-2 py-2">
-          <button class="tab btn" data-tab="daily">اليومي</button>
-          <button class="tab btn" data-tab="weekly">الأسبوعي</button>
-          <button class="tab btn" data-tab="monthly">الشهري</button>
-          <button class="tab btn" data-tab="activity">برامج النشاط</button>
-          <button class="tab btn" data-tab="nonclass">الأنشطة اللاصفّية</button>
-          <button class="tab btn" data-tab="parent">تواصل وليّ الأمر</button>
-          <button class="tab btn" data-tab="waiting">حصة الانتظار</button>
-        </div>
-      </div>
-    </nav>
-  </header>
+    <script>
+        const questions = {
+            visual: [2, 5, 6, 7, 8, 9, 10, 11], // Questions with images
+            analytical: [3, 4], // Text-based calculation questions
+            interactive: [1], // Questions with interactive tools
+            comprehensive: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // All questions
+        };
 
-  <!-- أزرار الإجراء -->
-  <section class="no-print max-w-6xl mx-auto px-4 pt-4">
-    <div class="flex flex-wrap gap-2">
-      <button id="btnSave" class="px-4 py-2 rounded-md text-white bg-primary hover:bg-primaryDark shadow-soft">حفظ سجل محليًا</button>
-      <button id="btnExport" class="px-4 py-2 rounded-md text-white bg-accent hover:bg-accentDark shadow-soft">طباعة / حفظ PDF</button>
-      <button id="btnClear" class="px-4 py-2 rounded-md bg-white border hover:bg-gray-50 shadow-soft">مسح المدخلات</button>
-      <!-- زر اختياري سيرسل للشيت لو أضفتِ Web App -->
-      <!-- <button id="btnSend" class="px-4 py-2 rounded-md text-white bg-black">إرسال إلى Google Sheets</button> -->
-    </div>
-  </section>
+        const questionData = {
+            1: {
+                type: 'interactive',
+                title: 'السؤال الأول: رسم الدالة',
+                question: 'ارسمي الدالة f(x) = |x| - 2 باستخدام جيوجبرا، ما هو شكل الرسم البياني؟',
+                formula: 'f(x) = |x| - 2',
+                geogebra: 'https://www.geogebra.org/classic?lang=ar',
+                options: {
+                    A: 'خط مستقيم يمر بالأصل',
+                    B: 'قطع مكافئ يفتح للأعلى',
+                    C: 'شكل V مع رأس عند النقطة (0, -2)',
+                    D: 'دائرة مركزها الأصل'
+                },
+                correct: 'C'
+            },
+            2: {
+                type: 'visual',
+                title: 'السؤال الثاني: تحليل الصورة',
+                question: 'بناءً على الصورة المعطاة، ما هو نوع الدالة الممثلة؟',
+                image: 'https://ibb.co/BHHWTZ3H',
+                options: {
+                    A: 'دالة خطية',
+                    B: 'دالة تربيعية',
+                    C: 'دالة مطلقة',
+                    D: 'دالة أسية'
+                },
+                correct: 'B'
+            },
+            3: {
+                type: 'analytical',
+                title: 'السؤال الثالث: مدى الدالة',
+                question: 'ما هو مدى الدالة التالية:',
+                formula: 'f(x) = [x + 2]',
+                options: {
+                    A: 'ℚ (الأعداد النسبية)',
+                    B: 'ℕ (الأعداد الطبيعية)',
+                    C: 'ℤ (الأعداد الصحيحة)',
+                    D: 'ℝ (الأعداد الحقيقية)'
+                },
+                correct: 'C'
+            },
+            4: {
+                type: 'analytical',
+                title: 'السؤال الرابع: حساب القيمة',
+                question: 'احسبي قيمة:',
+                formula: '[-4.8] = ?',
+                options: {
+                    A: '0',
+                    B: '-4',
+                    C: '-5',
+                    D: '4'
+                },
+                correct: 'C'
+            },
+            5: {
+                type: 'visual',
+                title: 'السؤال الخامس',
+                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+                image: 'https://ibb.co/84bLz6rm',
+                options: {
+                    A: 'الخيار الأول',
+                    B: 'الخيار الثاني',
+                    C: 'الخيار الثالث',
+                    D: 'الخيار الرابع'
+                },
+                correct: 'A'
+            },
+            6: {
+                type: 'visual',
+                title: 'السؤال السادس',
+                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+                image: 'https://ibb.co/99kXvSbx',
+                options: {
+                    A: 'الخيار الأول',
+                    B: 'الخيار الثاني',
+                    C: 'الخيار الثالث',
+                    D: 'الخيار الرابع'
+                },
+                correct: 'B'
+            },
+            7: {
+                type: 'visual',
+                title: 'السؤال السابع',
+                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+                image: 'https://ibb.co/RkSFxq68',
+                options: {
+                    A: 'الخيار الأول',
+                    B: 'الخيار الثاني',
+                    C: 'الخيار الثالث',
+                    D: 'الخيار الرابع'
+                },
+                correct: 'C'
+            },
+            8: {
+                type: 'visual',
+                title: 'السؤال الثامن',
+                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+                image: 'https://ibb.co/2YcLNjSX',
+                options: {
+                    A: 'الخيار الأول',
+                    B: 'الخيار الثاني',
+                    C: 'الخيار الثالث',
+                    D: 'الخيار الرابع'
+                },
+                correct: 'D'
+            },
+            9: {
+                type: 'visual',
+                title: 'السؤال التاسع',
+                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+                image: 'https://ibb.co/rGBpcDs4',
+                options: {
+                    A: 'الخيار الأول',
+                    B: 'الخيار الثاني',
+                    C: 'الخيار الثالث',
+                    D: 'الخيار الرابع'
+                },
+                correct: 'A'
+            },
+            10: {
+                type: 'visual',
+                title: 'السؤال العاشر',
+                question: 'بناءً على الصورة المعطاة، اختاري الإجابة الصحيحة:',
+                image: 'https://ibb.co/Rp9CrpT6',
+                options: {
+                    A: 'الخيار الأول',
+                    B: 'الخيار الثاني',
+                    C: 'الخيار الثالث',
+                    D: 'الخيار الرابع'
+                },
+                correct: 'B'
+            },
+            11: {
+                type: 'visual',
+                title: 'السؤال الحادي عشر: التمثيل الصحيح للدالة',
+                question: 'ما هو التمثيل الصحيح للدالة:',
+                formula: 'f(x) = |x| + 1',
+                image: 'https://ibb.co/S4qdD5tx',
+                options: {
+                    A: 'الرسم البياني الأول',
+                    B: 'الرسم البياني الثاني',
+                    C: 'الرسم البياني الثالث',
+                    D: 'الرسم البياني الرابع'
+                },
+                correct: 'A'
+            }
+        };
 
-  <!-- المحتوى -->
-  <main class="max-w-6xl mx-auto p-4">
-    <div class="card bg-white rounded-2xl shadow-soft border">
-      <div class="p-4 sm:p-6 border-b bg-gradient-to-l from-white to-purple-50/40 rounded-t-2xl">
-        <h2 id="formTitle" class="text-lg sm:text-xl font-bold text-primary">نموذج التقرير اليومي</h2>
-        <p class="text-xs sm:text-sm text-gray-600 mt-1">املئي الحقول التالية ثم اضغطي “حفظ سجل”.</p>
-      </div>
-
-      <form id="reportForm" class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- مشتركة -->
-        <div>
-          <label class="block text-sm mb-1">التاريخ</label>
-          <input type="date" name="date" class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary/30" required>
-        </div>
-        <div>
-          <label class="block text-sm mb-1">اسم المعلمة</label>
-          <input type="text" name="teacher" placeholder="اكتبي اسم المعلمة" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30" required>
-        </div>
-        <div>
-          <label class="block text-sm mb-1">المادة / البرنامج</label>
-          <input type="text" name="subject" placeholder="مثال: رياضيات / نادي STEM" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30">
-        </div>
-        <div>
-          <label class="block text-sm mb-1">الصف / القسم</label>
-          <input type="text" name="grade" placeholder="2 ث/أ" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30">
-        </div>
-        <div>
-          <label class="block text-sm mb-1">عدد الحاضرات</label>
-          <input type="number" min="0" name="presentCount" placeholder="مثال: 28" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30">
-        </div>
-        <div>
-          <label class="block text-sm mb-1">روابط صور/مرفقات</label>
-          <input type="url" name="attachments" placeholder="رابط Google Drive / صور" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30">
-        </div>
-        <div class="sm:col-span-2">
-          <label class="block text-sm mb-1">وصف موجز</label>
-          <textarea name="summary" rows="3" placeholder="ملخص التنفيذ والفعاليات…" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30"></textarea>
-        </div>
-        <div class="sm:col-span-2">
-          <label class="block text-sm mb-1">نواتج التعلم / الأثر</label>
-          <textarea name="outcomes" rows="3" placeholder="ما الذي تحقق؟ مؤشرات، شواهد…" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30"></textarea>
-        </div>
-
-        <!-- حقول خاصة بكل تبويب -->
-        <div id="tabSpecific" class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-      </form>
-
-      <div class="px-4 sm:px-6 pb-6">
-        <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-accent"></span> السجلات المحفوظة محليًا
-        </div>
-        <div id="savedList" class="grid gap-3"></div>
-      </div>
-
-      <footer class="px-4 sm:px-6 py-4 bg-gray-50/70 rounded-b-2xl text-sm text-gray-600">
-        <div class="flex flex-wrap items-center gap-2">
-          <span>© <span id="year"></span> الثانوية الثانية والخمسون</span>
-          <span class="w-1 h-1 rounded-full bg-gray-300"></span>
-          <span>إعداد: فاطمة سعد العمري — إشراف: أ. أسماء القرشي</span>
-        </div>
-      </footer>
-    </div>
-  </main>
-
-  <script>
-    const $ = s => document.querySelector(s);
-    const tabs = document.querySelectorAll('.tab');
-    const form = $('#reportForm');
-    const tabSpecific = $('#tabSpecific');
-    const savedList = $('#savedList');
-    const formTitle = $('#formTitle');
-    const storageKey = 'school-reports-v2';
-    let activeTab = 'daily';
-
-    // زر تبويب أنيق
-    document.querySelectorAll('.btn').forEach(b=>{
-      b.className = "tab px-3 py-2 rounded-lg border text-sm bg-white hover:bg-gray-50";
-    });
-
-    // حقول خاصة لكل تبويب
-    const tabFields = {
-      daily: [
-        {name:'lesson', label:'موضوع الدرس', type:'text', placeholder:'مثال: خصائص الأعداد الحقيقية'},
-        {name:'homework', label:'الواجب / المتابعة', type:'text', placeholder:'تم تسليم/متابعة الواجب…'}
-      ],
-      weekly: [
-        {name:'weekNo', label:'أسبوع رقم', type:'number', placeholder:'مثال: 2'},
-        {name:'goals', label:'أبرز أهداف الأسبوع', type:'textarea', placeholder:'الأهداف التنفيذية للأسبوع…'}
-      ],
-      monthly: [
-        {name:'month', label:'الشهر', type:'text', placeholder:'مثال: محرم 1447 / سبتمبر'},
-        {name:'kpis', label:'مؤشرات الأداء (KPIs)', type:'textarea', placeholder:'نسبة إنجاز، حضور، متوسط درجات…'}
-      ],
-      activity: [
-        {name:'programName', label:'اسم البرنامج', type:'text', placeholder:'مثال: مسابقة موهبة'},
-        {name:'partners', label:'شركاء / جهات مشاركة', type:'text', placeholder:'مثال: نادي الموهوبات'}
-      ],
-      nonclass: [
-        {name:'activityType', label:'نوع النشاط اللاصفي', type:'text', placeholder:'مثال: نادي القراءة'},
-        {name:'duration', label:'المدة', type:'text', placeholder:'مثال: 45 دقيقة'}
-      ],
-      parent: [
-        {name:'guardian', label:'اسم وليّ الأمر', type:'text', placeholder:'اسم ولي الأمر'},
-        {name:'message', label:'ملخص التواصل', type:'textarea', placeholder:'نص الاتصال / الرسالة / الملاحظة'}
-      ],
-      waiting: [
-        {name:'period', label:'الحصة', type:'text', placeholder:'مثال: الحصة الرابعة'},
-        {name:'reason', label:'السبب / خطة الاستفادة', type:'textarea', placeholder:'سبب الانتظار وخطة الاستفادة من الوقت'}
-      ]
-    };
-
-    function setYear(){ $('#year').textContent = new Date().getFullYear(); }
-    setYear();
-
-    function renderTabSpecific(tab){
-      tabSpecific.innerHTML = '';
-      (tabFields[tab]||[]).forEach(f=>{
-        const wrap = document.createElement('div');
-        const lbl = document.createElement('label');
-        lbl.className = 'block text-sm mb-1';
-        lbl.textContent = f.label;
-        let input;
-        if(f.type==='textarea'){
-          input = document.createElement('textarea'); input.rows=3;
-        }else{
-          input = document.createElement('input'); input.type=f.type||'text';
+        function selectPattern(pattern) {
+            document.getElementById('patternSelection').classList.add('hidden');
+            document.getElementById('questionsContainer').classList.remove('hidden');
+            
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+            
+            const selectedQuestions = questions[pattern];
+            
+            selectedQuestions.forEach((questionNum, index) => {
+                const question = questionData[questionNum];
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card p-6 mb-6';
+                
+                let questionContent = `
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">
+                            ${index + 1}
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">${question.title}</h3>
+                    </div>
+                    
+                    <!-- Question Box -->
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                        <p class="text-lg font-medium text-gray-800 mb-4">${question.question}</p>
+                `;
+                
+                // Add formula if exists
+                if (question.formula) {
+                    questionContent += `
+                        <div class="bg-white p-4 rounded-lg text-center text-xl font-bold text-blue-800 mb-4 border-2 border-blue-300">
+                            ${question.formula}
+                        </div>
+                    `;
+                }
+                
+                // Add image if exists
+                if (question.image) {
+                    questionContent += `
+                        <div class="text-center mb-4">
+                            <div class="bg-white border-2 border-blue-200 rounded-lg p-4 shadow-lg">
+                                <img src="${question.image}" alt="صورة السؤال" class="w-full max-w-2xl mx-auto rounded-lg shadow-md" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="hidden text-center p-8 bg-gray-100 rounded-lg">
+                                    <div class="text-4xl mb-2">🖼️</div>
+                                    <p class="text-gray-600 mb-2">لا يمكن تحميل الصورة</p>
+                                    <a href="${question.image}" target="_blank" class="text-blue-500 hover:text-blue-700 underline font-bold">
+                                        📎 عرض الصورة في نافذة جديدة
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Add GeoGebra link if exists
+                if (question.geogebra) {
+                    questionContent += `
+                        <div class="geogebra-container p-4 mb-4">
+                            <div class="text-center">
+                                <h4 class="text-lg font-bold text-blue-800 mb-2">🎯 أداة جيوجبرا التفاعلية</h4>
+                                <a href="${question.geogebra}" target="_blank" 
+                                   class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+                                    🚀 افتحي جيوجبرا كلاسيك
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                questionContent += `</div>`;
+                
+                // Add options
+                questionContent += `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" data-question="${questionNum}">
+                `;
+                
+                Object.entries(question.options).forEach(([key, value]) => {
+                    questionContent += `
+                        <button class="option-btn bg-white hover:bg-blue-50 border-2 border-gray-300 hover:border-blue-500 p-4 rounded-lg transition-all text-right" 
+                                onclick="selectOption(this, '${key}', ${questionNum})">
+                            <span class="font-bold text-blue-600">(${key})</span> ${value}
+                        </button>
+                    `;
+                });
+                
+                questionContent += `
+                    </div>
+                    <div id="feedback-${questionNum}" class="mt-4 hidden"></div>
+                `;
+                
+                questionDiv.innerHTML = questionContent;
+                questionsList.appendChild(questionDiv);
+            });
+            
+            // Add completion message
+            const completionDiv = document.createElement('div');
+            completionDiv.className = 'text-center p-8 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl';
+            completionDiv.innerHTML = `
+                <div class="text-4xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold mb-2">أحسنت!</h3>
+                <p class="text-lg">لقد أكملت جميع الأسئلة المناسبة لنمط تعلمك</p>
+            `;
+            questionsList.appendChild(completionDiv);
         }
-        input.name=f.name;
-        input.placeholder=f.placeholder||'';
-        input.className='w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary/30';
-        wrap.appendChild(lbl); wrap.appendChild(input);
-        tabSpecific.appendChild(wrap);
-      });
-    }
 
-    function activateTab(tab){
-      activeTab = tab;
-      document.querySelectorAll('.tab').forEach(b=>{
-        const on = b.dataset.tab===tab;
-        b.classList.toggle('tab-active', on);
-        b.classList.toggle('border-primary', on);
-      });
-      const titles = {
-        daily:'نموذج التقرير اليومي',
-        weekly:'نموذج التقرير الأسبوعي',
-        monthly:'نموذج التقرير الشهري',
-        activity:'نموذج برامج النشاط',
-        nonclass:'نموذج الأنشطة اللاصفّية',
-        parent:'نموذج تواصل وليّ الأمر',
-        waiting:'نموذج تقرير حصة الانتظار'
-      };
-      formTitle.textContent = titles[tab] || 'نموذج التقرير';
-      renderTabSpecific(tab);
-      loadDraft();
-      renderSaved();
-    }
-    document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
-    activateTab('daily');
+        function resetSelection() {
+            document.getElementById('patternSelection').classList.remove('hidden');
+            document.getElementById('questionsContainer').classList.add('hidden');
+        }
 
-    // تخزين محلي
-    function loadAll(){ try{ return JSON.parse(localStorage.getItem(storageKey))||{} }catch{ return {} } }
-    function saveAll(d){ localStorage.setItem(storageKey, JSON.stringify(d)); }
-    function getFormData(){ const d={_tab:activeTab}; new FormData(form).forEach((v,k)=>d[k]=v); return d; }
-    function setFormData(o={}){
-      [...form.elements].forEach(el=>{
-        if(!el.name) return;
-        el.value = (o.hasOwnProperty(el.name) ? o[el.name] : '');
-      });
-    }
-    function saveDraft(){ const all=loadAll(); all[`draft_${activeTab}`]=getFormData(); saveAll(all); }
-    function loadDraft(){ const all=loadAll(); setFormData(all[`draft_${activeTab}`]||{}); }
-
-    function saveRecord(){
-      const all = loadAll();
-      const key = `records_${activeTab}`;
-      all[key] = all[key] || [];
-      const record = getFormData(); record._id=Date.now();
-      all[key].unshift(record);
-      all[`draft_${activeTab}`] = {};
-      saveAll(all);
-      setFormData({});
-      renderSaved();
-      alert('تم الحفظ محليًا ✅');
-    }
-
-    function renderSaved(){
-      const all = loadAll();
-      const key = `records_${activeTab}`;
-      const items = all[key] || [];
-      savedList.innerHTML = '';
-      if(!items.length){ savedList.innerHTML='<div class="text-gray-500 text-sm">لا توجد سجلات محفوظة لهذا التبويب.</div>'; return; }
-      items.forEach(r=>{
-        const div = document.createElement('div');
-        div.className='border rounded-xl p-3 bg-white/80 hover:bg-gray-50 transition shadow-sm';
-        const head = `${r.date||'—'} • ${r.teacher||'—'} • ${r.subject||'—'}`;
-        div.innerHTML = `
-          <div class="text-sm font-semibold text-primary">${head}</div>
-          <div class="text-xs text-gray-600 mt-0.5">الصف: ${r.grade||'—'} | الحضور: ${r.presentCount||'—'}</div>
-          <div class="text-sm mt-1">${(r.summary||'').slice(0,160)}${(r.summary||'').length>160?'…':''}</div>
-          <div class="flex gap-3 pt-2 text-sm">
-            <button class="text-accentDark underline" data-action="fill">فتح</button>
-            <button class="text-red-600 underline" data-action="del">حذف</button>
-          </div>
+        function selectOption(button, selectedOption, questionNum) {
+            const question = questionData[questionNum];
+            const isCorrect = selectedOption === question.correct;
+            const feedbackDiv = document.getElementById(`feedback-${questionNum}`);
+            
+            // Remove previous selections and disable all buttons
+            const siblings = button.parentNode.querySelectorAll('.option-btn');
+            siblings.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('bg-blue-100', 'border-blue-500', 'bg-green-100', 'border-green-500', 'bg-red-100', 'border-red-500');
+                btn.classList.add('bg-gray-100', 'border-gray-300', 'opacity-60');
+            });
+            
+            // Highlight correct answer
+            siblings.forEach(btn => {
+                const btnOption = btn.onclick.toString().match(/'([A-D])'/)[1];
+                if (btnOption === question.correct) {
+                    btn.classList.remove('bg-gray-100', 'border-gray-300', 'opacity-60');
+                    btn.classList.add('bg-green-100', 'border-green-500', 'opacity-100');
+                }
+            });
+            
+            // Highlight selected answer if wrong
+            if (!isCorrect) {
+                button.classList.remove('bg-gray-100', 'border-gray-300');
+                button.classList.add('bg-red-100', 'border-red-500', 'opacity-100');
+            }
+            
+            // Show feedback with animation
+            feedbackDiv.classList.remove('hidden');
+            
+            if (isCorrect) {
+                const encouragements = [
+                    '🎉 ممتاز! إجابة صحيحة!',
+                    '👏 أحسنت! إجابة رائعة!',
+                    '⭐ عظيم! أنت على الطريق الصحيح!',
+                    '🌟 برافو! إجابة مثالية!',
+                    '🎯 ممتاز جداً! استمري هكذا!',
+                    '💫 رائع! أنت تتقدمين بشكل ممتاز!'
+                ];
+                const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+                
+                feedbackDiv.innerHTML = `
+                    <div class="bg-gradient-to-r from-green-400 to-emerald-500 text-white p-6 rounded-xl text-center animate-bounce">
+                        <div class="text-3xl mb-2">🎉</div>
+                        <h4 class="text-xl font-bold mb-2">${randomEncouragement}</h4>
+                        <p class="text-green-100">الإجابة الصحيحة هي: (${question.correct})</p>
+                    </div>
+                `;
+                
+                // Add confetti effect
+                createConfetti();
+                
+            } else {
+                feedbackDiv.innerHTML = `
+                    <div class="bg-gradient-to-r from-orange-400 to-red-400 text-white p-6 rounded-xl text-center">
+                        <div class="text-3xl mb-2">💪</div>
+                        <h4 class="text-xl font-bold mb-2">لا بأس! تعلمي من الأخطاء</h4>
+                        <p class="text-red-100 mb-2">اخترت: (${selectedOption})</p>
+                        <p class="text-red-100">الإجابة الصحيحة هي: (${question.correct})</p>
+                        <p class="text-red-100 mt-2 text-sm">💡 راجعي المفهوم وحاولي مرة أخرى!</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '9999';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Add CSS animation for confetti
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                }
+            }
         `;
-        div.querySelector('[data-action="fill"]').onclick=()=>{
-          setFormData(r); saveDraft(); window.scrollTo({top:0,behavior:'smooth'});
-        };
-        div.querySelector('[data-action="del"]').onclick=()=>{
-          const all2=loadAll(); all2[key]=(all2[key]||[]).filter(x=>x._id!==r._id); saveAll(all2); renderSaved();
-        };
-        savedList.appendChild(div);
-      });
-    }
-
-    // أزرار
-    $('#btnSave').addEventListener('click', saveRecord);
-    $('#btnExport').addEventListener('click', ()=>{ saveDraft(); window.print(); });
-    $('#btnClear').addEventListener('click', ()=>{ setFormData({}); saveDraft(); });
-    form.addEventListener('input', saveDraft);
-
-    // تكامل Google Sheets (اختياري)
-    const APPS_SCRIPT_URL = ""; // ضعي رابط الـ Web App هنا لو أردتِ الإرسال للشيت
-    async function sendToSheet(record){
-      if(!APPS_SCRIPT_URL){ alert('أضيفي رابط Web App في APPS_SCRIPT_URL'); return; }
-      try{
-        const res = await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(record)});
-        const data = await res.json();
-        alert(data.status==='ok'?'تم الإرسال إلى Google Sheets ✅':'حدثت مشكلة أثناء الإرسال');
-      }catch(e){ alert('فشل الاتصال: '+e.message); }
-    }
-    // document.getElementById('btnSend')?.addEventListener('click', ()=>sendToSheet(getFormData()));
-  </script>
-</body>
+        document.head.appendChild(style);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f9ee2960b5881e',t:'MTc1Nzk1ODI0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
